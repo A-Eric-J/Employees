@@ -2,6 +2,37 @@ package main
 
 import "fmt"
 
+// minStartTime / with this function we find the earliest
+// time start working of employees based on the visited array
+func minStartTime(employees []Employee, visited []bool) int {
+	minValue := 2050
+	minIndex := -1
+
+	for i := 0; i < len(employees); i++ {
+		if !visited[i] && employees[i].startTime < minValue {
+			minValue = employees[i].startTime
+			minIndex = i
+		}
+	}
+
+	return minIndex
+}
+
+// sortIndexes / we want to know the order index of sending
+// employees based on start working time
+func sortIndexes(employees []Employee, indexes []int) {
+	// this array is for knowing that we have sent the employee or not,
+	// and you see that, at first the initialized values are false
+	// it means that we have not sent the employees yet
+	visited := []bool{false, false, false, false, false}
+
+	for i := 0; i < len(employees); i++ {
+		minIndex := minStartTime(employees, visited)
+		indexes[i] = minIndex
+		visited[minIndex] = true
+	}
+}
+
 // Employee / we have some employees for sending on a mission
 //
 //	employees have some data like name, city of working, start working time in this company
@@ -25,6 +56,8 @@ func main() {
 	/// we have 3 cities (a , b, c) that are for departed mission and
 	/// these cities have some capacities => a : 2 , b : 1 , c : 2
 	departCityCapacity := []int{2, 1, 2}
+
+	sortIndexes(employees, orderIndexes)
 
 	fmt.Println(employees, orderIndexes, departCityCapacity)
 
